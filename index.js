@@ -1,14 +1,17 @@
-var leveljs = require("level-js");
-var levelup = require("levelup");
-var fs = require("level-filesystem");
+const leveljs = require("level-js");
+const levelup = require("levelup");
+const fs = require("level-filesystem");
+const pkg = require("./package.json");
+const browserify_fs = pkg["browserify-fs"];
 
-var now = new Date();
-var secondsSinceEpoch = Math.round(now.getTime() / 1000);
+const now = new Date();
+const secondsSinceEpoch = Math.round(now.getTime() / 1000);
+const uuid = window.crypto.getRandomValues(new Uint32Array(1))[0];
 
-var db = levelup(
-  `level-filesystem-${secondsSinceEpoch}-${
-    window.crypto.getRandomValues(new Uint32Array(1))[0]
-  }`,
-  { db: leveljs }
-);
+const dbNameSuffix = browserify_fs[`db-suffix`]
+  ? `-${secondsSinceEpoch}-${uuid}`
+  : ``;
+
+const db = levelup(leveljs(`level-filesystem${dbNameSuffix}`));
+
 module.exports = fs(db);
