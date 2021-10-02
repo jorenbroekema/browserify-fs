@@ -22,6 +22,17 @@ fs.mkdir('/home', function() {
 });
 ```
 
+Instead of reusing the same IndexedDB wrapper instance, this fork creates a different name every time. The name of the DB wrapper has a generated unique suffix and will be:
+
+```text
+IDBWrapper-level-filesystem-1633186027-123456789
+```
+
+Where the first number is the epoch timestamp, and the second number is a unique ID.
+
+> Keep in mind you will be creating a new IDB database every refresh, so be careful not to fill your client's disk storage too much, e.g. by cleaning up old IDB instances
+
+
 You can also make browserify replace `require('fs')` with browserify-fs using
 
 	browserify -r fs:browserify-fs
